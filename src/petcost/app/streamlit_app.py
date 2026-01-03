@@ -51,6 +51,23 @@ def check_database() -> bool:
     return breed_count > 0
 
 
+def build_database_if_needed() -> bool:
+    """Build the database if it doesn't exist. Returns True if successful."""
+    if check_database():
+        return True
+
+    # Auto-build for cloud deployment
+    try:
+        from petcost.pipeline.build_db import run_pipeline
+
+        with st.spinner("Building database for first run... This may take a minute."):
+            run_pipeline()
+        return check_database()
+    except Exception as e:
+        st.error(f"Failed to build database: {e}")
+        return False
+
+
 def get_breeds_list(species: str) -> pd.DataFrame:
     """Get list of breeds for a species."""
     db = get_db()
@@ -125,23 +142,16 @@ def main() -> None:
         initial_sidebar_state="expanded",
     )
 
-    # Check database
-    if not check_database():
+    # Check and build database if needed
+    if not build_database_if_needed():
         st.error(
             """
-            **Database not found or not initialized.**
+            **Database could not be initialized.**
 
-            Please run the pipeline to build the database:
+            If running locally, try:
 
             ```bash
             ./scripts/run_pipeline.sh
-            ```
-
-            Or manually:
-
-            ```bash
-            source .venv/bin/activate
-            python -m petcost.pipeline.build_db
             ```
             """
         )
