@@ -58,10 +58,10 @@ def build_database_if_needed() -> bool:
 
     # Auto-build for cloud deployment
     try:
-        from petcost.pipeline.build_db import run_pipeline
+        from petcost.pipeline.build_db import build_database
 
         with st.spinner("Building database for first run... This may take a minute."):
-            run_pipeline()
+            build_database(rebuild=True)
         return check_database()
     except Exception as e:
         st.error(f"Failed to build database: {e}")
