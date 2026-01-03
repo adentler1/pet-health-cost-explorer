@@ -1,6 +1,6 @@
 [server]
 headless = true
-port = 8502
+# port is managed by Streamlit Cloud
 
 [browser]
 gatherUsageStats = false
