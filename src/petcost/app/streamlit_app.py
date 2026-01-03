@@ -32,6 +32,14 @@ from petcost.features.risk_profiles import (
     get_overall_breed_risk_score,
     get_top_conditions_by_breed,
 )
+from petcost.features.inflation import (
+    calculate_annual_inflation_rate,
+    get_all_procedures_timeline,
+    get_got_procedures,
+    get_got_years,
+    get_inflation_summary,
+    get_procedure_history,
+)
 from petcost.schemas import verify_schema
 
 
@@ -257,11 +265,12 @@ def main() -> None:
             )
 
     # Tabs for detailed information
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "📊 Life Expectancy",
         "⚠️ Health Risks",
         "💰 Cost Estimates",
         "📈 Breed Comparison",
+        "📉 Cost Trends (DE)",
     ])
 
     with tab1:
@@ -455,10 +464,158 @@ def main() -> None:
         else:
             st.info("No comparison data available. Run the pipeline to generate cost estimates.")
 
+    with tab5:
+        st.subheader("German Veterinary Fee Trends (GOT)")
+        st.caption(
+            "Historical analysis of the German veterinary fee schedule (Gebührenordnung für Tierärzte). "
+            "Shows how costs have evolved from 1999 to 2022."
+        )
+
+        # Check if we have GOT data
+        got_years = get_got_years()
+
+        if got_years:
+            # Inflation summary metrics
+            inflation_stats = calculate_annual_inflation_rate(species, 1999, 2022)
+
+            if inflation_stats.get("cagr"):
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.metric(
+                        "Total Fee Increase",
+                        f"+{inflation_stats['total_change']:.0f}%",
+                        f"1999 → 2022",
+                    )
+
+                with col2:
+                    st.metric(
+                        "Annual Inflation (CAGR)",
+                        f"{inflation_stats['cagr']:.1f}%",
+                        "Compound annual growth",
+                    )
+
+                with col3:
+                    st.metric(
+                        "Average Fee",
+                        f"€{inflation_stats['fee_end']:.2f}",
+                        f"Up from €{inflation_stats['fee_start']:.2f}",
+                    )
+
+            st.markdown("---")
+
+            # Procedure selector
+            procedures = get_got_procedures()
+            if procedures:
+                procedure_options = {p["procedure_name"]: p["procedure_id"] for p in procedures}
+                selected_procedure_name = st.selectbox(
+                    "Select Procedure to Analyze",
+                    options=list(procedure_options.keys()),
+                    key="procedure_selector",
+                )
+                selected_procedure_id = procedure_options.get(selected_procedure_name)
+
+                # Get procedure history
+                proc_history = get_procedure_history(selected_procedure_id, species)
+
+                if not proc_history.empty:
+                    import plotly.graph_objects as go
+
+                    # Create line chart for fee history
+                    fig = go.Figure()
+
+                    fig.add_trace(go.Scatter(
+                        x=proc_history["year"],
+                        y=proc_history["fee_1x"],
+                        mode="lines+markers",
+                        name="1x Rate (Base)",
+                        line=dict(color="#1f77b4", width=3),
+                        marker=dict(size=10),
+                    ))
+
+                    fig.add_trace(go.Scatter(
+                        x=proc_history["year"],
+                        y=proc_history["fee_2x"],
+                        mode="lines+markers",
+                        name="2x Rate (Standard)",
+                        line=dict(color="#ff7f0e", width=2, dash="dash"),
+                        marker=dict(size=8),
+                    ))
+
+                    fig.add_trace(go.Scatter(
+                        x=proc_history["year"],
+                        y=proc_history["fee_3x"],
+                        mode="lines+markers",
+                        name="3x Rate (Complex)",
+                        line=dict(color="#2ca02c", width=2, dash="dot"),
+                        marker=dict(size=8),
+                    ))
+
+                    fig.update_layout(
+                        title=f"Fee History: {selected_procedure_name} ({species.title()})",
+                        xaxis_title="Year",
+                        yaxis_title="Fee (EUR)",
+                        hovermode="x unified",
+                        height=400,
+                    )
+
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    # Show data table
+                    with st.expander("View Historical Data"):
+                        display_df = proc_history[["year", "got_version", "fee_1x", "fee_2x", "fee_3x", "change_pct"]].copy()
+                        display_df["change_pct"] = display_df["change_pct"].apply(
+                            lambda x: f"+{x:.1f}%" if pd.notna(x) and x > 0 else (f"{x:.1f}%" if pd.notna(x) else "-")
+                        )
+                        display_df = display_df.rename(columns={
+                            "year": "Year",
+                            "got_version": "GOT Version",
+                            "fee_1x": "Base Fee (€)",
+                            "fee_2x": "2x Fee (€)",
+                            "fee_3x": "3x Fee (€)",
+                            "change_pct": "Change",
+                        })
+                        st.dataframe(display_df, use_container_width=True)
+
+            # Inflation comparison across all procedures
+            st.markdown("---")
+            st.markdown("### Inflation by Procedure (1999 → 2022)")
+
+            inflation_df = get_inflation_summary(species, 1999, 2022)
+
+            if not inflation_df.empty:
+                import plotly.express as px
+
+                fig = px.bar(
+                    inflation_df.sort_values("change_pct", ascending=True),
+                    x="change_pct",
+                    y="procedure_name",
+                    orientation="h",
+                    color="change_pct",
+                    color_continuous_scale="RdYlGn_r",
+                    labels={"change_pct": "% Change", "procedure_name": "Procedure"},
+                )
+
+                fig.update_layout(
+                    title=f"Fee Increases by Procedure ({species.title()})",
+                    height=max(400, len(inflation_df) * 35),
+                    showlegend=False,
+                )
+
+                st.plotly_chart(fig, use_container_width=True)
+
+                st.caption(
+                    "**Data Sources:** GOT 1999, 2008, 2017, 2022 official fee schedules. "
+                    "1999/2008 values back-calculated from known 12% increases. "
+                    "[buzer.de](https://www.buzer.de), [gesetze-im-internet.de](https://www.gesetze-im-internet.de/got_2022/)"
+                )
+        else:
+            st.info("No historical fee data available. Run the pipeline to load GOT data.")
+
     # Footer
     st.markdown("---")
     st.caption(
-        "Pet Health Cost Explorer | Data sources: VetCompass, PDSA PAW Report, BVA Fee Survey | "
+        "Pet Health Cost Explorer | Data sources: VetCompass, PDSA PAW Report, BVA Fee Survey, German GOT | "
         "All cost estimates are for informational purposes only."
     )
 

@@ -178,6 +178,56 @@ def load_seed_cost_mapping(seed_dir: Optional[Path] = None) -> pd.DataFrame:
     return df
 
 
+def load_seed_got_historical(seed_dir: Optional[Path] = None) -> pd.DataFrame:
+    """
+    Load GOT historical fee data from CSV.
+
+    Args:
+        seed_dir: Optional custom seed directory
+
+    Returns:
+        DataFrame with GOT historical data
+    """
+    filepath = _get_seed_path("seed_got_historical.csv", seed_dir)
+    logger.info(f"Loading GOT historical data from {filepath}")
+
+    df = pd.read_csv(filepath)
+
+    # Validate required columns
+    required_cols = [
+        "procedure_id",
+        "procedure_name",
+        "category",
+        "species",
+        "year",
+        "got_version",
+        "fee_1x",
+        "fee_2x",
+        "fee_3x",
+        "currency",
+        "source",
+    ]
+    missing = set(required_cols) - set(df.columns)
+    if missing:
+        raise ValueError(f"Missing required columns in GOT historical CSV: {missing}")
+
+    # Clean data
+    df["procedure_id"] = df["procedure_id"].str.lower().str.strip()
+    df["procedure_name"] = df["procedure_name"].str.strip()
+    df["category"] = df["category"].str.lower().str.strip()
+    df["species"] = df["species"].str.lower().str.strip()
+    df["got_version"] = df["got_version"].str.strip()
+    df["currency"] = df["currency"].str.upper().str.strip()
+
+    # Ensure numeric columns
+    df["year"] = pd.to_numeric(df["year"], errors="coerce").astype(int)
+    for col in ["fee_1x", "fee_2x", "fee_3x"]:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    logger.info(f"Loaded {len(df)} GOT historical records ({df['year'].nunique()} years)")
+    return df
+
+
 def validate_seed_data(seed_dir: Optional[Path] = None) -> dict[str, bool]:
     """
     Validate that all required seed data files exist and are valid.

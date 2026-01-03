@@ -20,6 +20,7 @@ from petcost.features.cost_model import CostSimulator
 from petcost.ingest.sources import (
     load_seed_breeds,
     load_seed_cost_mapping,
+    load_seed_got_historical,
     load_seed_life_expectancy,
     load_seed_risk_profiles,
 )
@@ -133,6 +134,40 @@ def load_cost_assumptions(db: object) -> int:
     ]
 
     return db.insert_df(df_insert, "cost_assumptions", if_exists="append")
+
+
+def load_got_historical(db: object) -> int:
+    """
+    Load GOT historical fee data into the database.
+
+    Args:
+        db: Database connection
+
+    Returns:
+        Number of rows inserted
+    """
+    logger.info("Loading GOT historical data...")
+    df = load_seed_got_historical()
+
+    # Select columns for database
+    df_insert = df[
+        [
+            "procedure_id",
+            "procedure_name",
+            "category",
+            "species",
+            "year",
+            "got_version",
+            "fee_1x",
+            "fee_2x",
+            "fee_3x",
+            "currency",
+            "source",
+            "citation",
+        ]
+    ]
+
+    return db.insert_df(df_insert, "got_historical", if_exists="append")
 
 
 def run_cost_simulations(db: object) -> int:
@@ -277,6 +312,9 @@ def build_database(rebuild: bool = False) -> dict[str, int]:
 
     costs_count = load_cost_assumptions(db)
     logger.info(f"Loaded {costs_count} cost assumptions")
+
+    got_count = load_got_historical(db)
+    logger.info(f"Loaded {got_count} GOT historical records")
 
     # Run simulations
     if settings.use_synthetic_costs:

@@ -123,6 +123,30 @@ CREATE TABLE IF NOT EXISTS metadata (
     value TEXT NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- GOT Historical table: German veterinary fee schedule history for inflation analysis
+CREATE TABLE IF NOT EXISTS got_historical (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    procedure_id TEXT NOT NULL,
+    procedure_name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    species TEXT NOT NULL CHECK(species IN ('dog', 'cat', 'all')),
+    year INTEGER NOT NULL,
+    got_version TEXT NOT NULL,
+    fee_1x REAL NOT NULL,           -- Base fee (1-facher Satz)
+    fee_2x REAL NOT NULL,           -- Double fee (2-facher Satz)
+    fee_3x REAL NOT NULL,           -- Triple fee (3-facher Satz)
+    currency TEXT NOT NULL DEFAULT 'EUR',
+    source TEXT NOT NULL,
+    citation TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(procedure_id, species, year)
+);
+
+-- Create indexes for common queries
+CREATE INDEX IF NOT EXISTS idx_got_historical_procedure ON got_historical(procedure_id);
+CREATE INDEX IF NOT EXISTS idx_got_historical_year ON got_historical(year);
+CREATE INDEX IF NOT EXISTS idx_got_historical_species ON got_historical(species);
 """
 
 
@@ -157,6 +181,7 @@ def get_table_stats() -> dict[str, int]:
         "breed_condition_risk",
         "cost_assumptions",
         "simulated_costs",
+        "got_historical",
         "metadata",
     ]
     stats = {}
