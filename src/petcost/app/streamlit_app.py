@@ -333,13 +333,36 @@ def main() -> None:
             if risk_summary and risk_summary["condition_count"] > 0:
                 st.markdown("---")
                 st.markdown("### Risk Category Breakdown")
+                st.caption(
+                    "Health conditions grouped by body system. Higher counts indicate more "
+                    "breed-specific vulnerabilities in that category. This helps identify "
+                    "which types of veterinary specialists or insurance coverage may be most relevant."
+                )
 
                 categories = risk_summary.get("categories", {})
                 if categories:
+                    # Add category explanations
+                    category_info = {
+                        "orthopedic": "Bones, joints & mobility",
+                        "neurological": "Brain, spine & nerves",
+                        "cardiovascular": "Heart & circulation",
+                        "respiratory": "Lungs & breathing",
+                        "dermatological": "Skin, coat & ears",
+                        "ophthalmological": "Eyes & vision",
+                        "gastrointestinal": "Digestive system",
+                        "oncological": "Cancer-related",
+                        "endocrine": "Hormones & metabolism",
+                        "dental": "Teeth & gums",
+                        "urological": "Kidneys & bladder",
+                    }
                     cat_cols = st.columns(len(categories))
                     for i, (category, count) in enumerate(categories.items()):
                         with cat_cols[i]:
-                            st.metric(category.title(), count)
+                            st.metric(
+                                category.title(),
+                                count,
+                                help=category_info.get(category, "Health conditions in this category")
+                            )
         else:
             st.info("No health risk data available for this breed.")
 
