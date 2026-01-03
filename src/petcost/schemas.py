@@ -137,6 +137,7 @@ CREATE TABLE IF NOT EXISTS got_historical (
     fee_2x REAL NOT NULL,           -- Double fee (2-facher Satz)
     fee_3x REAL NOT NULL,           -- Triple fee (3-facher Satz)
     currency TEXT NOT NULL DEFAULT 'EUR',
+    yearly_inflation_pct REAL,      -- Annualized inflation rate (CAGR) since previous GOT version
     source TEXT NOT NULL,
     citation TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

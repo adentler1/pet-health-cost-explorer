@@ -221,7 +221,7 @@ def load_seed_got_historical(seed_dir: Optional[Path] = None) -> pd.DataFrame:
 
     # Ensure numeric columns
     df["year"] = pd.to_numeric(df["year"], errors="coerce").astype(int)
-    for col in ["fee_1x", "fee_2x", "fee_3x"]:
+    for col in ["fee_1x", "fee_2x", "fee_3x", "yearly_inflation_pct"]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
     logger.info(f"Loaded {len(df)} GOT historical records ({df['year'].nunique()} years)")

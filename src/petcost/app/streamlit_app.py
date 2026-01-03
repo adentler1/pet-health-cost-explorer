@@ -563,9 +563,12 @@ def main() -> None:
 
                     # Show data table
                     with st.expander("View Historical Data"):
-                        display_df = proc_history[["year", "got_version", "fee_1x", "fee_2x", "fee_3x", "change_pct"]].copy()
-                        display_df["change_pct"] = display_df["change_pct"].apply(
-                            lambda x: f"+{x:.1f}%" if pd.notna(x) and x > 0 else (f"{x:.1f}%" if pd.notna(x) else "-")
+                        display_df = proc_history[["year", "got_version", "fee_1x", "fee_2x", "fee_3x", "yearly_inflation_pct", "cumulative_change_pct"]].copy()
+                        display_df["yearly_inflation_pct"] = display_df["yearly_inflation_pct"].apply(
+                            lambda x: f"{x:.2f}%/yr" if pd.notna(x) else "-"
+                        )
+                        display_df["cumulative_change_pct"] = display_df["cumulative_change_pct"].apply(
+                            lambda x: f"+{x:.1f}%" if pd.notna(x) and x > 0 else (f"{x:.1f}%" if pd.notna(x) else "baseline")
                         )
                         display_df = display_df.rename(columns={
                             "year": "Year",
@@ -573,7 +576,8 @@ def main() -> None:
                             "fee_1x": "Base Fee (€)",
                             "fee_2x": "2x Fee (€)",
                             "fee_3x": "3x Fee (€)",
-                            "change_pct": "Change",
+                            "yearly_inflation_pct": "Annual CAGR",
+                            "cumulative_change_pct": "Total Change",
                         })
                         st.dataframe(display_df, use_container_width=True)
 

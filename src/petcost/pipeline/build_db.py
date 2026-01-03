@@ -162,6 +162,7 @@ def load_got_historical(db: object) -> int:
             "fee_2x",
             "fee_3x",
             "currency",
+            "yearly_inflation_pct",
             "source",
             "citation",
         ]

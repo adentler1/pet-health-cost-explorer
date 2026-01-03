@@ -65,6 +65,7 @@ def get_procedure_history(
             fee_1x,
             fee_2x,
             fee_3x,
+            yearly_inflation_pct,
             procedure_name,
             category,
             source
@@ -80,8 +81,7 @@ def get_procedure_history(
         logger.warning(f"No GOT data for procedure {procedure_id}/{species}")
         return df
 
-    # Calculate year-over-year change
-    df["change_pct"] = df["fee_1x"].pct_change() * 100
+    # Calculate cumulative change from baseline
     df["cumulative_change_pct"] = ((df["fee_1x"] / df["fee_1x"].iloc[0]) - 1) * 100
 
     return df
