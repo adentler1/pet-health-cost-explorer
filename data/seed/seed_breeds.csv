@@ -1,0 +1,75 @@
+species,breed_id,breed_name,alt_names,source
+dog,dog_generic,Generic Dog,"Average Dog,Typical Dog",Scientific_Consensus_2024
+dog,dog_mixed,Mixed Breed Dog,"Crossbreed,Mutt,Mongrel,Hybrid",VetCompass_2024
+dog,dog_labrador,Labrador Retriever,"Lab,Labrador",VetCompass_2024
+dog,dog_german_shepherd,German Shepherd,"GSD,Alsatian",VetCompass_2024
+dog,dog_golden_retriever,Golden Retriever,"Golden",VetCompass_2024
+dog,dog_french_bulldog,French Bulldog,"Frenchie",VetCompass_2024
+dog,dog_bulldog,Bulldog,"English Bulldog,British Bulldog",VetCompass_2024
+dog,dog_poodle,Poodle,"Standard Poodle",VetCompass_2024
+dog,dog_beagle,Beagle,"English Beagle",VetCompass_2024
+dog,dog_rottweiler,Rottweiler,"Rottie",VetCompass_2024
+dog,dog_yorkshire_terrier,Yorkshire Terrier,"Yorkie",VetCompass_2024
+dog,dog_boxer,Boxer,"German Boxer",VetCompass_2024
+dog,dog_dachshund,Dachshund,"Sausage Dog,Teckel",VetCompass_2024
+dog,dog_miniature_dachshund,Miniature Dachshund,"Mini Dachshund",VetCompass_2024
+dog,dog_shih_tzu,Shih Tzu,"Chrysanthemum Dog",VetCompass_2024
+dog,dog_siberian_husky,Siberian Husky,"Husky",VetCompass_2024
+dog,dog_cavalier_king_charles,Cavalier King Charles Spaniel,"Cavalier,CKCS",VetCompass_2024
+dog,dog_pug,Pug,"Dutch Mastiff",VetCompass_2024
+dog,dog_border_collie,Border Collie,"Collie",VetCompass_2024
+dog,dog_cocker_spaniel,Cocker Spaniel,"English Cocker Spaniel",VetCompass_2024
+dog,dog_jack_russell,Jack Russell Terrier,"JRT,Jack Russell",VetCompass_2024
+dog,dog_miniature_schnauzer,Miniature Schnauzer,"Mini Schnauzer",VetCompass_2024
+dog,dog_chihuahua,Chihuahua,"Chi",VetCompass_2024
+dog,dog_lancashire_heeler,Lancashire Heeler,"Ormskirk Terrier",VetCompass_2024
+dog,dog_tibetan_spaniel,Tibetan Spaniel,"Tibbie",VetCompass_2024
+dog,dog_great_dane,Great Dane,"German Mastiff,Apollo of Dogs",VetCompass_2024
+dog,dog_doberman,Doberman Pinscher,"Doberman,Dobie",VetCompass_2024
+dog,dog_australian_shepherd,Australian Shepherd,"Aussie",VetCompass_2024
+dog,dog_bernese_mountain,Bernese Mountain Dog,"Berner",VetCompass_2024
+dog,dog_mastiff,Mastiff,"English Mastiff",VetCompass_2024
+dog,dog_springer_spaniel,English Springer Spaniel,"Springer",VetCompass_2024
+dog,dog_staffordshire_bull_terrier,Staffordshire Bull Terrier,"Staffy",VetCompass_2024
+dog,dog_weimaraner,Weimaraner,"Grey Ghost",VetCompass_2024
+dog,dog_cane_corso,Cane Corso,"Italian Mastiff",VetCompass_2024
+dog,dog_presa_canario,Presa Canario,"Canary Mastiff",VetCompass_2024
+dog,dog_caucasian_shepherd,Caucasian Shepherd,"Caucasian Ovcharka",VetCompass_2024
+dog,dog_bichon_frise,Bichon Frise,"Bichon",VetCompass_2024
+dog,dog_pomeranian,Pomeranian,"Pom",VetCompass_2024
+dog,dog_maltese,Maltese,"Maltese Terrier",VetCompass_2024
+dog,dog_west_highland_terrier,West Highland White Terrier,"Westie",VetCompass_2024
+dog,dog_boston_terrier,Boston Terrier,"Boston Bull",VetCompass_2024
+dog,dog_shetland_sheepdog,Shetland Sheepdog,"Sheltie",VetCompass_2024
+dog,dog_akita,Akita,"Akita Inu",VetCompass_2024
+dog,dog_basenji,Basenji,"African Barkless Dog",VetCompass_2024
+dog,dog_whippet,Whippet,"Snap Dog",VetCompass_2024
+dog,dog_samoyed,Samoyed,"Sammy",VetCompass_2024
+dog,dog_basset_hound,Basset Hound,"Basset",VetCompass_2024
+dog,dog_shiba_inu,Shiba Inu,"Shiba",VetCompass_2024
+dog,dog_dalmatian,Dalmatian,"Dal,Firehouse Dog",VetCompass_2024
+dog,dog_vizsla,Vizsla,"Hungarian Pointer",VetCompass_2024
+cat,cat_generic,Generic Cat,"Average Cat,Typical Cat",Scientific_Consensus_2024
+cat,cat_mixed,Mixed Breed Cat,"Crossbreed,Moggy,Domestic",VetCompass_2024
+cat,cat_domestic_shorthair,Domestic Shorthair,"DSH",VetCompass_2024
+cat,cat_domestic_longhair,Domestic Longhair,"DLH",VetCompass_2024
+cat,cat_british_shorthair,British Shorthair,"BSH",VetCompass_2024
+cat,cat_maine_coon,Maine Coon,"Gentle Giant",VetCompass_2024
+cat,cat_ragdoll,Ragdoll,"Raggies",VetCompass_2024
+cat,cat_siamese,Siamese,"Meezer",VetCompass_2024
+cat,cat_persian,Persian,"Longhair,Persian Longhair",VetCompass_2024
+cat,cat_bengal,Bengal,"Leopard Cat",VetCompass_2024
+cat,cat_russian_blue,Russian Blue,"Archangel Cat",VetCompass_2024
+cat,cat_abyssinian,Abyssinian,"Aby",VetCompass_2024
+cat,cat_sphynx,Sphynx,"Canadian Hairless",VetCompass_2024
+cat,cat_scottish_fold,Scottish Fold,"Fold",VetCompass_2024
+cat,cat_burmese,Burmese,"Copper Cat",VetCompass_2024
+cat,cat_birman,Birman,"Sacred Cat of Burma",VetCompass_2024
+cat,cat_norwegian_forest,Norwegian Forest Cat,"Wegie,Skogkatt",VetCompass_2024
+cat,cat_oriental,Oriental Shorthair,"Oriental",VetCompass_2024
+cat,cat_tonkinese,Tonkinese,"Tonk",VetCompass_2024
+cat,cat_devon_rex,Devon Rex,"Pixie Cat",VetCompass_2024
+cat,cat_cornish_rex,Cornish Rex,"Cornish",VetCompass_2024
+cat,cat_exotic_shorthair,Exotic Shorthair,"Exotic",VetCompass_2024
+cat,cat_ragamuffin,Ragamuffin,"Muffin",VetCompass_2024
+cat,cat_turkish_angora,Turkish Angora,"Angora",VetCompass_2024
